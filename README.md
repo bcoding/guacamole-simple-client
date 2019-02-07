@@ -19,3 +19,8 @@ Complete example setup:
 Then go to:
 
 http://localhost:8080/#targetHost=selenium&guacdHost=guacd&targetPassword=secret
+
+Optional parameters:
+* targetProtocol (default vnc)
+* guacdPort (default 4822)
+* targetPort (default 5900)

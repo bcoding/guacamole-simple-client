@@ -117,15 +117,6 @@ public class SimpleGuacamoleTunnelServlet extends GuacamoleHTTPTunnelServlet {
         super.doPost(request, response);
     }
 
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-//        if (!PARAMETERS.stream().allMatch(config -> config.check(request.getParameterMap()))) {
-//            setErrorResponse(response);
-//            return;
-//        }
-//        super.doGet(request, response);
-//    }
-
     @Override
     protected GuacamoleTunnel doConnect(HttpServletRequest request) {
 
