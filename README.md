@@ -14,7 +14,7 @@ Complete example setup:
   
   `docker run --rm  --name guacd --link selenium -d guacamole/guacd`
   
-  `docker run -it -p 8080:8080 --link guacd --rm bcoding/guacamole-simple-client`
+  `docker run -it -p 8080:8080 --link guacd --rm bcodingde/guacamole-simple-client`
   
 Then go to:
 
