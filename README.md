@@ -19,6 +19,7 @@ Complete example setup:
 Then go to:
 
 http://localhost:8080/#targetHost=selenium&guacdHost=guacd&targetPassword=secret
+http://localhost:8080/index-ws.html#targetHost=selenium&guacdHost=guacd&targetPassword=secret
 
 Optional parameters:
 * targetProtocol (default vnc)

@@ -35,12 +35,24 @@
     <servlet>
         <description>Tunnel servlet.</description>
         <servlet-name>Tunnel</servlet-name>
-        <servlet-class>org.apache.guacamole.net.example.SimpleGuacamoleTunnelServlet</servlet-class>
+        <servlet-class>de.bcoding.guacamole.SimpleGuacamoleTunnelServlet</servlet-class>
     </servlet>
+    <!--<servlet>-->
+        <!--<description>Websocket Tunnel servlet.</description>-->
+        <!--<servlet-name>WebsocketTunnel</servlet-name>-->
+        <!--<servlet-class>de.bcoding.guacamole.SimpleGuacamoleWebsocketEndpoint</servlet-class>-->
+    <!--</servlet>-->
+
     <servlet-mapping>
         <servlet-name>Tunnel</servlet-name>
         <url-pattern>/tunnel</url-pattern>
     </servlet-mapping>
+
+
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>WebsocketTunnel</servlet-name>-->
+        <!--<url-pattern>/ws-tunnel</url-pattern>-->
+    <!--</servlet-mapping>-->
 
 
 </web-app>
