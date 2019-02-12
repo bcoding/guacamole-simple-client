@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -63,12 +64,12 @@ public class SimpleGuacamoleTunnelServlet extends GuacamoleHTTPTunnelServlet {
     private static final Map<String, ParameterConfiguration> PARAMETER_MAP;
 
     static {
-        PARAMETERS.add(new ParameterConfiguration(PARAM_TARGET_PROTOCOL, "vnc"));
-        PARAMETERS.add(new ParameterConfiguration(PARAM_TARGET_HOST));
-        PARAMETERS.add(new ParameterConfiguration(PARAM_TARGET_PORT, "5900"));
-        PARAMETERS.add(new ParameterConfiguration(PARAM_TARGET_PASSWORD, null));
-        PARAMETERS.add(new ParameterConfiguration(PARAM_GUACD_HOST));
-        PARAMETERS.add(new ParameterConfiguration(PARAM_GUACD_PORT, "4822"));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_TARGET_PROTOCOL", PARAM_TARGET_PROTOCOL, "vnc"));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_TARGET_HOST", PARAM_TARGET_HOST));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_TARGET_PORT", PARAM_TARGET_PORT, "5900"));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_TARGET_PASSWORD", PARAM_TARGET_PASSWORD, null));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_GUACD_HOST", PARAM_GUACD_HOST));
+        PARAMETERS.add(new ParameterConfiguration("DEFAULT_GUACD_PORT", PARAM_GUACD_PORT, "4822"));
         PARAMETER_MAP = PARAMETERS.stream().collect(Collectors.toMap(ParameterConfiguration::getName, o -> o));
     }
 
@@ -80,27 +81,37 @@ public class SimpleGuacamoleTunnelServlet extends GuacamoleHTTPTunnelServlet {
 
         private final String name;
 
-        ParameterConfiguration(String name, boolean optional, String defaultValue) {
+        private final String environmentVariable;
+
+        ParameterConfiguration(String environmentVariable, String name, boolean optional, String defaultValue) {
+            this.environmentVariable = environmentVariable;
             this.defaultValue = defaultValue;
             this.optional = optional;
             this.name = name;
         }
 
-        ParameterConfiguration(String name, String defaultValue) {
-            this(name, true, defaultValue);
+        ParameterConfiguration(String environmentVariable, String name, String defaultValue) {
+            this(environmentVariable, name, true, defaultValue);
         }
 
-        ParameterConfiguration(String name) {
-            this(name, false, null);
+        ParameterConfiguration(String environmentVariable, String name) {
+            this(environmentVariable, name, false, null);
         }
 
         boolean check(Map<String, String[]> parameters) {
             final String[] values = parameters.get(name);
-            return optional || values != null && values.length != 0;
+            return optional || (values != null && values.length != 0) || System.getenv(environmentVariable) != null;
         }
 
         String getValue(Map<String, String[]> parameters) {
-            return parameters.getOrDefault(name, new String[] { defaultValue })[0];
+            String[] parameterValue = parameters.get(name);
+            if(parameterValue == null) {
+                parameterValue = new String[]{
+                        Optional.ofNullable(System.getenv(environmentVariable))
+                                .orElse(defaultValue)
+                };
+            }
+            return parameterValue[0];
         }
 
         String getName() {
